@@ -6,8 +6,9 @@ plugins {
 
 val getTag = {
     try {
-        ProcessBuilder("git", "describe", "--tags").start().inputStream.bufferedReader().readText()
-            .trim().ifEmpty { "v0.0.0" }
+        ProcessBuilder(
+            "git", "describe", "--tags", "--abbrev=0"
+        ).start().inputStream.bufferedReader().readText().trim().ifEmpty { "v0.0.0" }
     } catch (e: Exception) {
         "v0.0.0"
     }
@@ -21,7 +22,7 @@ val parseVersionName = {
 val parseVersionCode = {
     val tag = getTag()
     val versionParts = tag.removePrefix("v").split(".")
-    if (versionParts.size == 3) {
+    if (versionParts.size >= 3) {
         versionParts[0].toInt() * 10000 + versionParts[1].toInt() * 100 + versionParts[2].toInt()
     } else {
         100000
