@@ -3,14 +3,38 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
+
+val getTag = {
+    try {
+        ProcessBuilder("git", "describe", "--tags").start().inputStream.bufferedReader().readText()
+            .trim().ifEmpty { "v0.0.0" }
+    } catch (e: Exception) {
+        "v0.0.0"
+    }
+}
+
+val parseVersionName = {
+    val tag = getTag()
+    tag.removePrefix("v")
+}
+
+val parseVersionCode = {
+    val tag = getTag()
+    val versionParts = tag.removePrefix("v").split(".")
+    if (versionParts.size == 3) {
+        versionParts[0].toInt() * 10000 + versionParts[1].toInt() * 100 + versionParts[2].toInt()
+    } else {
+        100000
+    }
+}
 android {
     namespace = "com.hirrao.appktp"
     defaultConfig {
         applicationId = "com.hirrao.appktp"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = parseVersionCode()
+        versionName = parseVersionName()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -19,8 +43,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
