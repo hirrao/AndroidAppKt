@@ -3,13 +3,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
-
 android {
-    namespace = "com.hirrao.android"
-    compileSdk = 35
-
+    namespace = "com.hirrao.appktp"
     defaultConfig {
-        applicationId = "com.hirrao.android"
+        applicationId = "com.hirrao.appktp"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
@@ -37,6 +34,7 @@ android {
     buildFeatures {
         compose = true
     }
+    compileSdk = 35
     buildToolsVersion = "35.0.1"
 }
 

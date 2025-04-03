@@ -1,4 +1,4 @@
-package com.hirrao.android
+package com.hirrao.appktp
 
 import org.junit.Test
 
