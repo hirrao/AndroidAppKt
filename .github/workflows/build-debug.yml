@@ -1,0 +1,41 @@
+name: BuildDebug
+
+on:
+  push:
+    branches: [ 'main' ]
+
+permissions:
+    contents: write
+
+jobs:
+  BuildDebug:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+
+        - name: Grant Execute Permission for gradlew
+          run: chmod +x gradlew
+
+        - name: Setup Java
+          uses: actions/setup-java@v4
+          with:
+            java-version: '17'
+            distribution: 'oracle'
+
+        - name: Setup Gradle
+          uses: gradle/actions/setup-gradle@v4
+
+        - name: Build
+          run: ./gradlew --no-daemon app:assembleDebug
+
+        - name: Upload Aritfact
+          uses: actions/upload-artifact@v4
+          with:
+            name: 'debug-apk'
+            path: |
+              app/build/outputs/apk/debug/*.apk
+
+              
