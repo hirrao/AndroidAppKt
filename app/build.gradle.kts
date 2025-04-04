@@ -1,48 +1,72 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
-val getTag = {
+val parseVersionName = {
     try {
         ProcessBuilder(
             "git", "describe", "--tags", "--abbrev=0"
-        ).start().inputStream.bufferedReader().readText().trim().ifEmpty { "v0.0.0" }
+        ).start().inputStream.bufferedReader().readText().trim().ifEmpty {
+            logger.error("ERROR in GET TAGS")
+            "v1.0.0"
+        }
     } catch (e: Exception) {
-        "v0.0.0"
-    }
-}
-
-val parseVersionName = {
-    val tag = getTag()
-    tag.removePrefix("v")
+        logger.error("ERROR in GET TAGS")
+        "v1.0.0"
+    }.removePrefix("v")
 }
 
 val parseVersionCode = {
-    val tag = getTag()
-    val versionParts = tag.removePrefix("v").split(".")
-    if (versionParts.size >= 3) {
-        versionParts[0].toInt() * 10000 + versionParts[1].toInt() * 100 + versionParts[2].toInt()
-    } else {
-        100000
-    }
+    try {
+        ProcessBuilder(
+            "git", "rev-list", "--count", "HEAD"
+        ).start().inputStream.bufferedReader().readText().trim().ifEmpty {
+            logger.error("ERROR in GET TAGS")
+            "1"
+        }
+    } catch (e: Exception) {
+        logger.error("ERROR in GET TAGS")
+        "1"
+    }.toInt()
 }
+
 android {
     namespace = "com.hirrao.appktp"
     defaultConfig {
         applicationId = "com.hirrao.appktp"
         minSdk = 26
         targetSdk = 35
+        compileSdk = 35
+        buildToolsVersion = "35.0.1"
         versionCode = parseVersionCode()
         versionName = parseVersionName()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        val keyStore = rootProject.file("signature.properties")
+        if (keyStore.exists()) {
+            create("release") {
+                val prop = Properties().apply {
+                    keyStore.inputStream().use(this::load)
+                }
+                storeFile = rootProject.file("release.jks")
+                storePassword = prop.getProperty("signing.storePassword")
+                keyAlias = prop.getProperty("signing.keyAlias")
+                keyPassword = prop.getProperty("signing.keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.findByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
@@ -58,12 +82,9 @@ android {
     buildFeatures {
         compose = true
     }
-    compileSdk = 35
-    buildToolsVersion = "35.0.1"
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
