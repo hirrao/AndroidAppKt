@@ -30,7 +30,7 @@ jobs:
             echo "signing.keyAlias=${{ secrets.SIGNING_KEY_ALIAS }}" > signature.properties
             echo "signing.storePassword=${{ secrets.SIGNING_STORE_PASSWORD }}" >> signature.properties
             echo "signing.keyPassword=${{ secrets.SIGNING_KEY_PASSWORD }}" >> signature.properties
-            base64 --decode <<< "${{secrets.JKS_BASE64}}" > keystore.jks
+            base64 --decode <<< "${{secrets.JKS_BASE64}}" > release.jks
             echo "signing.storeFile=keystore.jks" >> signature.properties
 
         - name: Build
