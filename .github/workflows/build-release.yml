@@ -13,6 +13,9 @@ jobs:
           with:
             fetch-depth: 0
 
+        - name: Grant Execute Permission for gradlew
+          run: chmod +x gradlew
+
         - name: Setup Java
           uses: actions/setup-java@v4
           with:
