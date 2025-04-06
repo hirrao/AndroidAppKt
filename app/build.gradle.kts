@@ -14,7 +14,7 @@ val parseVersionName = {
             logger.error("ERROR in GET TAGS")
             "v1.0.0"
         }
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         logger.error("ERROR in GET TAGS")
         "v1.0.0"
     }.removePrefix("v")
@@ -28,7 +28,7 @@ val parseVersionCode = {
             logger.error("ERROR in GET TAGS")
             "1"
         }
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         logger.error("ERROR in GET TAGS")
         "1"
     }.toInt()
@@ -38,9 +38,9 @@ android {
     namespace = "com.hirrao.appktp"
     defaultConfig {
         applicationId = "com.hirrao.appktp"
-        minSdk = 26
-        targetSdk = 35
-        compileSdk = 35
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        compileSdk = libs.versions.compileSdk.get().toInt()
         buildToolsVersion = "35.0.1"
         versionCode = parseVersionCode()
         versionName = parseVersionName()

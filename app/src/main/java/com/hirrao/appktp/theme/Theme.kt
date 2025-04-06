@@ -1,4 +1,4 @@
-package com.hirrao.appktp.ui.theme
+package com.hirrao.appktp.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -12,7 +12,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80, secondary = PurpleGrey80, tertiary = Pink80
+    primary = Purple80,
+    secondary = PurpleGrey80,
+    tertiary = Pink80,
+    background = Color(0xFF121212),
+    surface = Color(0xFF121212),
+    onBackground = Color(0xFF2D3132)
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -30,10 +35,10 @@ private val LightColorScheme = lightColorScheme(
     )
 
 @Composable
-fun AndroidTheme(
+fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true, content: @Composable () -> Unit
+    dynamicColor: Boolean = true,
+    content: @Composable () -> Unit
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {

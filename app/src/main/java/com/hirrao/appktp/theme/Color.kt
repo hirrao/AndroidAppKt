@@ -1,4 +1,4 @@
-package com.hirrao.appktp.ui.theme
+package com.hirrao.appktp.theme
 
 import androidx.compose.ui.graphics.Color
 
