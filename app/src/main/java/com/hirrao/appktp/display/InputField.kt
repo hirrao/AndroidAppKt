@@ -65,8 +65,8 @@ fun CommonInputField(
             ) {
                 val buttonModifier = Modifier
                     .padding(16.dp)
-                    .width(144.dp)
-                    .height(64.dp)
+                    .width(128.dp)
+                    .height(54.dp)
                 Button(modifier = buttonModifier, onClick = { }) {
                     Text("信息处理")
                 }
@@ -79,7 +79,7 @@ fun CommonInputField(
 }
 
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 360)
 @Composable
 fun CommonInputFieldPreview() {
     AppTheme {
