@@ -19,9 +19,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
+import com.hirrao.appktp.R
 import com.hirrao.appktp.theme.AppTheme
 
 @Composable
@@ -86,10 +88,10 @@ fun CommonInputField(
                 .width(128.dp)
                 .height(54.dp)
             Button(modifier = buttonModifier, onClick = { }) {
-                Text("信息处理")
+                Text(stringResource(R.string.button_1))
             }
             Button(modifier = buttonModifier, onClick = { }) {
-                Text("信息列出")
+                Text(stringResource(R.string.button_2))
             }
         }
     }

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">信息管理</string>
+    <string name="button_1">信息处理</string>
+    <string name="button_2">信息列出</string>
 </resources>

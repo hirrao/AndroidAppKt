@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Data Controller</string>
+    <string name="button_1">Process Information </string>
+    <string name="button_2">List Information </string>
 </resources>
