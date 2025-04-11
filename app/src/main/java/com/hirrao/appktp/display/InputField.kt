@@ -73,32 +73,32 @@ fun UserTextInput(
         idText = it
         idError = !idText.isDigitsOnly()
         id.intValue = idText.toIntOrNull() ?: 0
-    }, label = { Text("ID") })
+    }, label = { Text(stringResource(R.string.id_name)) })
     TextField(modifier = textModifier, value = name.value, isError = idError, supportingText = {
         if (idError) {
-            Text("请输入正确的ID")
+            Text(stringResource(R.string.input_error, stringResource(R.string.id_name)))
         }
     }, onValueChange = {
         name.value = it
-    }, label = { Text("Name") })
+    }, label = { Text(stringResource(R.string.name_name)) })
     TextField(modifier = textModifier, value = ageText, isError = ageError, supportingText = {
         if (ageError) {
-            Text("请输入正确的年龄")
+            Text(stringResource(R.string.input_error, stringResource(R.string.age_name)))
         }
     }, onValueChange = {
         ageText = it
         ageError = !ageText.isDigitsOnly()
         age.intValue = ageText.toIntOrNull() ?: 0
-    }, label = { Text("Age") })
+    }, label = { Text(stringResource(R.string.age_name)) })
     TextField(modifier = textModifier, value = heightText, isError = heightError, supportingText = {
         if (heightError) {
-            Text("请输入正确的身高")
+            Text(stringResource(R.string.input_error, stringResource(R.string.height_name)))
         }
     }, onValueChange = {
         heightText = it
         heightError = !heightText.isDigitsOnly()
         height.doubleValue = heightText.toDoubleOrNull() ?: 0.0
-    }, label = { Text("Height") })
+    }, label = { Text(stringResource(R.string.height_name)) })
 }
 
 @Composable
@@ -113,10 +113,10 @@ fun DataButtons(
             .width(128.dp)
             .height(54.dp)
         Button(modifier = buttonModifier, onClick = { }) {
-            Text(stringResource(R.string.button_1))
+            Text(stringResource(R.string.data_button_1))
         }
         Button(modifier = buttonModifier, onClick = { }) {
-            Text(stringResource(R.string.button_2))
+            Text(stringResource(R.string.data_button_2))
         }
     }
 }
