@@ -49,9 +49,10 @@ fun CommonInputField(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         UserTextInput(id, name, age, height)
-        DataButtons(
-            id = id.intValue, name = name.value, age = age.intValue, height = height.doubleValue
-        )
+        DataButtons(showDialog)
+    }
+    if (showDialog.value) {
+        UserDialog(id.intValue, name.value, age.intValue, height.doubleValue, showDialog)
     }
 }
 
@@ -106,7 +107,7 @@ fun UserTextInput(
 
 @Composable
 fun DataButtons(
-    id: Int, name: String, age: Int, height: Double
+    showDialog: MutableState<Boolean>
 ) {
     Row(
         horizontalArrangement = Arrangement.Center
@@ -115,7 +116,7 @@ fun DataButtons(
             .padding(16.dp)
             .width(128.dp)
             .height(54.dp)
-        Button(modifier = buttonModifier, onClick = { }) {
+        Button(modifier = buttonModifier, onClick = { showDialog.value = true }) {
             Text(stringResource(R.string.data_button_1))
         }
         Button(modifier = buttonModifier, onClick = { }) {

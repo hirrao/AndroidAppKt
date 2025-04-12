@@ -8,4 +8,8 @@
     <string name="name_name">姓名</string>
     <string name="age_name">年龄</string>
     <string name="height_name">身高</string>
+    <string name="process_dialog_button_1">信息插入</string>
+    <string name="process_dialog_button_2">信息删除</string>
+    <string name="process_dialog_button_3">信息更新</string>
+    <string name="process_dialog_description_1">你所输入的数据是</string>
 </resources>

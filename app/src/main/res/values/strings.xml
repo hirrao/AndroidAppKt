@@ -7,4 +7,8 @@
     <string name="name_name">Name</string>
     <string name="age_name">Age</string>
     <string name="height_name">Height</string>
+    <string name="process_dialog_button_1">Insert Data</string>
+    <string name="process_dialog_button_2">Delete Data</string>
+    <string name="process_dialog_button_3">Update Data</string>
+    <string name="process_dialog_description_1">The data you have inputted is</string>
 </resources>
