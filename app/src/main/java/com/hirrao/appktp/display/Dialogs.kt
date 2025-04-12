@@ -60,7 +60,7 @@ fun UserDialog(
                     } : $height"
                 )
                 Spacer(modifier = Modifier.height(32.dp))
-                Row() {
+                Row(modifier = Modifier.padding(2.dp)) {
                     TextButton(
                         onClick = { showDialog.value = false }, modifier = buttonModifier
                     ) {
