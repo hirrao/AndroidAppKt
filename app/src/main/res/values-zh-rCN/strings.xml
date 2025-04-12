@@ -4,6 +4,7 @@
     <string name="data_button_1">信息处理</string>
     <string name="data_button_2">信息列出</string>
     <string name="input_error">请输入正确的%1$s</string>
+    <string name="id_name">ID</string>
     <string name="name_name">姓名</string>
     <string name="age_name">年龄</string>
     <string name="height_name">身高</string>

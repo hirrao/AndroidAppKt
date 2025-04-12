@@ -1,5 +1,8 @@
 package com.hirrao.appktp.display
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -121,7 +124,19 @@ fun DataButtons(
     }
 }
 
-@Preview(showBackground = true, widthDp = 360)
+@Preview(
+    name = "Main-Preview-zhCN-dark",
+    widthDp = 360,
+    locale = "zh-rCN",
+    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL
+)
+@Preview(
+    name = "Main-Preview-enUS-light",
+    showBackground = true,
+    widthDp = 360,
+    locale = "en-rUS",
+    uiMode = UI_MODE_NIGHT_NO or UI_MODE_TYPE_NORMAL
+)
 @Composable
 fun CommonInputFieldPreview() {
     AppTheme {

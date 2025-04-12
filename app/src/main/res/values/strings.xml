@@ -3,7 +3,7 @@
     <string name="data_button_1">Process Information </string>
     <string name="data_button_2">List Information </string>
     <string name="input_error">Please input the correct %1$s</string>
-    <string name="id_name" translatable="false">ID</string>
+    <string name="id_name">ID</string>
     <string name="name_name">Name</string>
     <string name="age_name">Age</string>
     <string name="height_name">Height</string>
