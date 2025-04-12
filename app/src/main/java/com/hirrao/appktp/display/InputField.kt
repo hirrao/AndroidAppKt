@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -26,12 +27,27 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.hirrao.appktp.R
-import com.hirrao.appktp.theme.AppTheme
+import com.hirrao.appktp.theme.Red40
 
+@Preview(
+    name = "Main-Preview-zhCN-dark",
+    widthDp = 360,
+    locale = "zh-rCN",
+    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL
+)
+@Preview(
+    name = "Main-Preview-enUS-light",
+    showBackground = true,
+    widthDp = 360,
+    locale = "en-rUS",
+    uiMode = UI_MODE_NIGHT_NO or UI_MODE_TYPE_NORMAL
+)
 @Composable
 fun CommonInputField(
     modifier: Modifier = Modifier
@@ -41,6 +57,7 @@ fun CommonInputField(
     var age = remember { mutableIntStateOf(0) }
     var height = remember { mutableDoubleStateOf(0.0) }
     var showDialog = remember { mutableStateOf(false) }
+    var showErrorText = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .padding(24.dp)
@@ -49,7 +66,12 @@ fun CommonInputField(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         UserTextInput(id, name, age, height)
-        DataButtons(showDialog)
+        DataButtons(
+            id.intValue, name.value, age.intValue, height.doubleValue, showDialog, showErrorText
+        )
+        if (showErrorText.value) {
+            ErrorText()
+        }
     }
     if (showDialog.value) {
         UserDialog(id.intValue, name.value, age.intValue, height.doubleValue, showDialog)
@@ -107,7 +129,12 @@ fun UserTextInput(
 
 @Composable
 fun DataButtons(
-    showDialog: MutableState<Boolean>
+    id: Int,
+    name: String,
+    age: Int,
+    height: Double,
+    showDialog: MutableState<Boolean>,
+    showErrorText: MutableState<Boolean>
 ) {
     Row(
         horizontalArrangement = Arrangement.Center
@@ -116,7 +143,14 @@ fun DataButtons(
             .padding(16.dp)
             .width(128.dp)
             .height(54.dp)
-        Button(modifier = buttonModifier, onClick = { showDialog.value = true }) {
+        Button(modifier = buttonModifier, onClick = {
+            if (id == 0 || name.isEmpty() || age == 0 || height == 0.0) {
+                showErrorText.value = true
+            } else {
+                showErrorText.value = false
+                showDialog.value = true
+            }
+        }) {
             Text(stringResource(R.string.data_button_1))
         }
         Button(modifier = buttonModifier, onClick = { }) {
@@ -125,22 +159,16 @@ fun DataButtons(
     }
 }
 
-@Preview(
-    name = "Main-Preview-zhCN-dark",
-    widthDp = 360,
-    locale = "zh-rCN",
-    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL
-)
-@Preview(
-    name = "Main-Preview-enUS-light",
-    showBackground = true,
-    widthDp = 360,
-    locale = "en-rUS",
-    uiMode = UI_MODE_NIGHT_NO or UI_MODE_TYPE_NORMAL
-)
+@Preview
 @Composable
-fun CommonInputFieldPreview() {
-    AppTheme {
-        CommonInputField()
-    }
+fun ErrorText() {
+    val modifier =
+        Modifier
+            .padding(12.dp)
+            .fillMaxWidth()
+            .wrapContentWidth(Alignment.CenterHorizontally)
+    val style = TextStyle(
+        color = Red40, fontSize = 16.sp
+    )
+    Text(modifier = modifier, text = stringResource(R.string.input_error_text), style = style)
 }

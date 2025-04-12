@@ -12,4 +12,5 @@
     <string name="process_dialog_button_2">信息删除</string>
     <string name="process_dialog_button_3">信息更新</string>
     <string name="process_dialog_description_1">你所输入的数据是</string>
+    <string name="input_error_text">请输入正确的数据</string>
 </resources>

@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hirrao.appktp.R
 
-// TODO: 根据输入框内的值确定不同的对话框
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserDialog(
