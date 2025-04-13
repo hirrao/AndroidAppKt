@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.hirrao.appktp.R
+import com.hirrao.appktp.data.User
+import com.hirrao.appktp.enums.DialogDisplayEnums
 import com.hirrao.appktp.theme.Red40
 
 @Preview(
@@ -58,6 +60,7 @@ fun CommonInputField(
     var height = remember { mutableDoubleStateOf(0.0) }
     var showDialog = remember { mutableStateOf(false) }
     var showErrorText = remember { mutableStateOf(false) }
+    var dialogState = remember { mutableStateOf(DialogDisplayEnums.NONE) }
     Column(
         modifier = Modifier
             .padding(24.dp)
@@ -74,7 +77,10 @@ fun CommonInputField(
         }
     }
     if (showDialog.value) {
-        UserDialog(id.intValue, name.value, age.intValue, height.doubleValue, showDialog)
+        UserDialog(User(id.intValue, name.value, age.intValue, height.doubleValue), showDialog,dialogState)
+    }
+    if (dialogState.value != DialogDisplayEnums.NONE) {
+        ResultDialog(dialogState)
     }
 }
 

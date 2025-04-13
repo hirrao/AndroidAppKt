@@ -23,14 +23,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hirrao.appktp.App.Companion.userDao
 import com.hirrao.appktp.R
 import com.hirrao.appktp.data.User
-import com.hirrao.appktp.data.insertUser
+import com.hirrao.appktp.enums.DialogDisplayEnums
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserDialog(
-    id: Int, name: String, age: Int, height: Double, showDialog: MutableState<Boolean>
+    user: User, showDialog: MutableState<Boolean>, dialogState: MutableState<DialogDisplayEnums>
 ) {
     BasicAlertDialog(onDismissRequest = {
         showDialog.value = false
@@ -47,19 +51,19 @@ fun UserDialog(
                         stringResource(
                             R.string.id_name
                         )
-                    } : ${id}\n" + "${
+                    } : ${user.id}\n" + "${
                         stringResource(
                             R.string.name_name
                         )
-                    } : $name\n" + "${
+                    } : ${user.name}\n" + "${
                         stringResource(
                             R.string.age_name
                         )
-                    } : $age\n" + "${
+                    } : ${user.age}\n" + "${
                         stringResource(
                             R.string.height_name
                         )
-                    } : $height"
+                    } : ${user.height}"
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 Row(modifier = Modifier.padding(2.dp)) {
@@ -67,9 +71,13 @@ fun UserDialog(
                         onClick = {
                             showDialog.value = false
                             // @TODO: 检查是否成功, 错误处理
-                            insertUser(
-                                User(id, name, age, height)
-                            )
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val _user = userDao.getById(user.id)
+                                if (_user == null) {
+                                    userDao.insert(user)
+                                    dialogState.value = DialogDisplayEnums.INSERT_SUCCESS
+                                } else dialogState.value = DialogDisplayEnums.INSERT_ERROR
+                            }
                         }, modifier = buttonModifier
                     ) {
                         Text(stringResource(R.string.process_dialog_button_1))
@@ -90,6 +98,14 @@ fun UserDialog(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ResultDialog(dialogState: MutableState<DialogDisplayEnums>) {
+    BasicAlertDialog(onDismissRequest = {
+        dialogState.value = DialogDisplayEnums.NONE
+    }) {}
+}
+
 @Preview(
     name = "Main-Preview-zhCN-dark",
     widthDp = 360,
@@ -105,10 +121,9 @@ fun UserDialog(
 )
 @Composable
 fun UserDialogPreview() {
-    UserDialog(
-        id = 0,
-        name = "text",
-        age = 0,
-        height = 0.0,
-        showDialog = remember { mutableStateOf(true) })
+    UserDialog(User(0, "test", 0, 0.0), remember { mutableStateOf(true) }, remember {
+        mutableStateOf(
+            DialogDisplayEnums.NONE
+        )
+    })
 }
