@@ -23,9 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hirrao.appktp.App.Companion.dataBase
 import com.hirrao.appktp.R
 import com.hirrao.appktp.data.User
+import com.hirrao.appktp.data.insertUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +36,6 @@ fun UserDialog(
         showDialog.value = false
     }) {
         val buttonModifier = Modifier.padding(4.dp)
-        val userDao = dataBase.UserDao()
         Surface(
             modifier = Modifier
                 .wrapContentWidth()
@@ -68,7 +67,7 @@ fun UserDialog(
                         onClick = {
                             showDialog.value = false
                             // @TODO: 检查是否成功, 错误处理
-                            userDao.insert(
+                            insertUser(
                                 User(id, name, age, height)
                             )
                         }, modifier = buttonModifier
