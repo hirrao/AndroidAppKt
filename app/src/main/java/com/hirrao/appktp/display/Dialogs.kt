@@ -72,8 +72,8 @@ fun UserDialog(
                             showDialog.value = false
                             // @TODO: 检查是否成功, 错误处理
                             CoroutineScope(Dispatchers.IO).launch {
-                                val _user = userDao.getById(user.id)
-                                if (_user == null) {
+                                val selectUser = userDao.getById(user.id)
+                                if (selectUser == null) {
                                     userDao.insert(user)
                                     dialogState.value = DialogDisplayEnums.INSERT_SUCCESS
                                 } else dialogState.value = DialogDisplayEnums.INSERT_ERROR
@@ -103,7 +103,26 @@ fun UserDialog(
 fun ResultDialog(dialogState: MutableState<DialogDisplayEnums>) {
     BasicAlertDialog(onDismissRequest = {
         dialogState.value = DialogDisplayEnums.NONE
-    }) {}
+    }) {
+        val buttonModifier = Modifier.padding(4.dp)
+        Surface(
+            modifier = Modifier
+                .wrapContentWidth()
+                .wrapContentHeight()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("EMPTY")
+                Spacer(modifier = Modifier.height(32.dp))
+                Row(modifier = Modifier.padding(2.dp)) {
+                    TextButton(
+                        modifier = buttonModifier,
+                        onClick = { dialogState.value = DialogDisplayEnums.NONE }) {
+                        Text("Dismiss")
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Preview(
@@ -126,4 +145,10 @@ fun UserDialogPreview() {
             DialogDisplayEnums.NONE
         )
     })
+}
+
+@Preview
+@Composable
+fun ResultDialogPreview() {
+    ResultDialog(remember { mutableStateOf(DialogDisplayEnums.NONE) })
 }
