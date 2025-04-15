@@ -90,15 +90,24 @@ fun UserDialog(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResultDialog(dialogState: MutableState<DialogDisplayEnums>) {
+    val text = when (dialogState.value) {
+        DialogDisplayEnums.INSERT_SUCCESS -> stringResource(R.string.result_dialog_insert_success)
+        DialogDisplayEnums.INSERT_ERROR -> stringResource(R.string.result_dialog_insert_error)
+        else -> ""
+    }
+    val onClick = {
+        dialogState.value = DialogDisplayEnums.NONE
+    }
     CommonDialog(
         onDismissRequest = { dialogState.value = DialogDisplayEnums.NONE },
         modifier = Modifier,
-        text = "Empty"
+        text = text
     ) {
         val buttonModifier = Modifier.padding(4.dp)
         TextButton(
-            modifier = buttonModifier, onClick = { dialogState.value = DialogDisplayEnums.NONE }) {
-            Text("Dismiss")
+            modifier = buttonModifier, onClick = onClick
+        ) {
+            Text(stringResource(R.string.result_dialog_button_1))
         }
     }
 }

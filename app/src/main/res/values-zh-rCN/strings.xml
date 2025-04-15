@@ -13,4 +13,7 @@
     <string name="process_dialog_button_3">信息更新</string>
     <string name="process_dialog_description_1">你所输入的数据是</string>
     <string name="input_error_text">请输入正确的数据</string>
+    <string name="result_dialog_insert_success">成功插入数据</string>
+    <string name="result_dialog_insert_error">插入数据失败, 请确保ID唯一</string>
+    <string name="result_dialog_button_1">确认</string>
 </resources>
