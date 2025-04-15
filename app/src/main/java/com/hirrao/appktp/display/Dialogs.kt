@@ -60,33 +60,29 @@ fun UserDialog(
         showDialog.value = false
     }, text = text) {
         val buttonModifier = Modifier.padding(4.dp)
-        Row(modifier = Modifier.padding(2.dp)) {
-            Spacer(modifier = Modifier.weight(1f))
-            TextButton(
-                onClick = {
-                    showDialog.value = false
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val selectUser = userDao.getById(user.id)
-                        if (selectUser == null) {
-                            userDao.insert(user)
-                            dialogState.value = DialogDisplayEnums.INSERT_SUCCESS
-                        } else dialogState.value = DialogDisplayEnums.INSERT_ERROR
-                    }
-                }, modifier = buttonModifier
-            ) {
-                Text(stringResource(R.string.process_dialog_button_1))
-            }
-            TextButton(
-                onClick = { showDialog.value = false }, modifier = buttonModifier
-            ) {
-                Text(stringResource(R.string.process_dialog_button_2))
-            }
-            TextButton(
-                onClick = { showDialog.value = false }, modifier = buttonModifier
-            ) {
-                Text(stringResource(R.string.process_dialog_button_3))
-            }
-            Spacer(modifier = Modifier.weight(1f))
+        TextButton(
+            onClick = {
+                showDialog.value = false
+                CoroutineScope(Dispatchers.IO).launch {
+                    val selectUser = userDao.getById(user.id)
+                    if (selectUser == null) {
+                        userDao.insert(user)
+                        dialogState.value = DialogDisplayEnums.INSERT_SUCCESS
+                    } else dialogState.value = DialogDisplayEnums.INSERT_ERROR
+                }
+            }, modifier = buttonModifier
+        ) {
+            Text(stringResource(R.string.process_dialog_button_1))
+        }
+        TextButton(
+            onClick = { showDialog.value = false }, modifier = buttonModifier
+        ) {
+            Text(stringResource(R.string.process_dialog_button_2))
+        }
+        TextButton(
+            onClick = { showDialog.value = false }, modifier = buttonModifier
+        ) {
+            Text(stringResource(R.string.process_dialog_button_3))
         }
     }
 }
@@ -100,14 +96,9 @@ fun ResultDialog(dialogState: MutableState<DialogDisplayEnums>) {
         text = "Empty"
     ) {
         val buttonModifier = Modifier.padding(4.dp)
-        Row(modifier = Modifier.padding(2.dp)) {
-            Spacer(modifier = Modifier.weight(1f))
-            TextButton(
-                modifier = buttonModifier,
-                onClick = { dialogState.value = DialogDisplayEnums.NONE }) {
-                Text("Dismiss")
-            }
-            Spacer(modifier = Modifier.weight(1f))
+        TextButton(
+            modifier = buttonModifier, onClick = { dialogState.value = DialogDisplayEnums.NONE }) {
+            Text("Dismiss")
         }
     }
 }
@@ -142,7 +133,9 @@ fun CommonDialog(
                     verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.End
                 ) {
+                    Spacer(modifier = Modifier.weight(1f))
                     buttons()
+                    Spacer(modifier = Modifier.weight(1f))
                 }
             }
         }
