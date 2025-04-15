@@ -152,12 +152,14 @@ fun CommonDialog(
 
 @Preview(
     name = "Main-Preview-zhCN-dark",
+    group = "UserDialog",
     widthDp = 360,
     locale = "zh-rCN",
     uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL
 )
 @Preview(
     name = "Main-Preview-enUS-light",
+    group = "UserDialog",
     showBackground = true,
     widthDp = 360,
     locale = "en-rUS",
@@ -172,8 +174,32 @@ fun UserDialogPreview() {
     })
 }
 
-@Preview
+@Preview(group = "ResultDialog")
 @Composable
-fun ResultDialogPreview() {
-    ResultDialog(remember { mutableStateOf(DialogDisplayEnums.NONE) })
+fun ResultDialogInsertSuccessPreview() {
+    ResultDialog(remember { mutableStateOf(DialogDisplayEnums.INSERT_SUCCESS) })
+}
+
+@Preview(group = "ResultDialog")
+@Composable
+fun ResultDialogInsertErrorPreview() {
+    ResultDialog(remember { mutableStateOf(DialogDisplayEnums.INSERT_ERROR) })
+}
+
+@Preview(group = "ResultDialog")
+@Composable
+fun ResultDialogUpdateSuccessPreview() {
+    ResultDialog(remember { mutableStateOf(DialogDisplayEnums.UPDATE_SUCCESS) })
+}
+
+@Preview(group = "ResultDialog")
+@Composable
+fun ResultDialogDeleteSuccessPreview() {
+    ResultDialog(remember { mutableStateOf(DialogDisplayEnums.DELETE_SUCCESS) })
+}
+
+@Preview(group = "ResultDialog")
+@Composable
+fun ResultDialogDeleteErrorPreview() {
+    ResultDialog(remember { mutableStateOf(DialogDisplayEnums.DELETE_ERROR) })
 }
