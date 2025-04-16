@@ -24,8 +24,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.hirrao.appktp.App.Companion.userDao
 import com.hirrao.appktp.R
 import com.hirrao.appktp.data.User
@@ -58,29 +60,62 @@ fun UserDialog(
     } : ${user.height}"
     CommonDialog(modifier = Modifier, onDismissRequest = {
         showDialog.value = false
-    }, text = text) {
+    }, text = {
+        Text(text = text)
+    }) {
         val buttonModifier = Modifier.padding(4.dp)
         TextButton(
             onClick = {
                 showDialog.value = false
                 CoroutineScope(Dispatchers.IO).launch {
-                    val selectUser = userDao.getById(user.id)
-                    if (selectUser == null) {
-                        userDao.insert(user)
-                        dialogState.value = DialogDisplayEnums.INSERT_SUCCESS
-                    } else dialogState.value = DialogDisplayEnums.INSERT_ERROR
+                    try {
+                        val selectUser = userDao.getById(user.id)
+                        if (selectUser == null) {
+                            userDao.insert(user)
+                            dialogState.value = DialogDisplayEnums.INSERT_SUCCESS
+                        } else dialogState.value = DialogDisplayEnums.INSERT_ERROR
+                    } catch (_: Exception) {
+                        dialogState.value = DialogDisplayEnums.INSERT_ERROR
+                    }
                 }
             }, modifier = buttonModifier
         ) {
             Text(stringResource(R.string.process_dialog_button_1))
         }
         TextButton(
-            onClick = { showDialog.value = false }, modifier = buttonModifier
+            onClick = {
+                showDialog.value = false
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val selectUser = userDao.getById(user.id)
+                        if (selectUser != null) {
+                            userDao.delete(user)
+                            dialogState.value = DialogDisplayEnums.DELETE_SUCCESS
+                        } else dialogState.value = DialogDisplayEnums.DELETE_ERROR
+                    } catch (_: Exception) {
+                        dialogState.value = DialogDisplayEnums.DELETE_ERROR
+                    }
+                }
+            }, modifier = buttonModifier
         ) {
             Text(stringResource(R.string.process_dialog_button_2))
         }
         TextButton(
-            onClick = { showDialog.value = false }, modifier = buttonModifier
+            onClick = {
+                showDialog.value = false
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val selectUser = userDao.getById(user.id)
+                        if (selectUser != null) {
+                            userDao.update(user)
+                            dialogState.value = DialogDisplayEnums.UPDATE_SUCCESS
+                        } else dialogState.value = DialogDisplayEnums.UPDATE_ERROR
+                    } catch (_: Exception) {
+                        dialogState.value = DialogDisplayEnums.UPDATE_ERROR
+                    }
+                }
+
+            }, modifier = buttonModifier
         ) {
             Text(stringResource(R.string.process_dialog_button_3))
         }
@@ -93,6 +128,10 @@ fun ResultDialog(dialogState: MutableState<DialogDisplayEnums>) {
     val text = when (dialogState.value) {
         DialogDisplayEnums.INSERT_SUCCESS -> stringResource(R.string.result_dialog_insert_success)
         DialogDisplayEnums.INSERT_ERROR -> stringResource(R.string.result_dialog_insert_error)
+        DialogDisplayEnums.UPDATE_SUCCESS -> stringResource(R.string.result_dialog_update_success)
+        DialogDisplayEnums.UPDATE_ERROR -> stringResource(R.string.result_dialog_update_error)
+        DialogDisplayEnums.DELETE_SUCCESS -> stringResource(R.string.result_dialog_delete_success)
+        DialogDisplayEnums.DELETE_ERROR -> stringResource(R.string.result_dialog_delete_error)
         else -> ""
     }
     val onClick = {
@@ -101,8 +140,13 @@ fun ResultDialog(dialogState: MutableState<DialogDisplayEnums>) {
     CommonDialog(
         onDismissRequest = { dialogState.value = DialogDisplayEnums.NONE },
         modifier = Modifier,
-        text = text
-    ) {
+        text = {
+            Text(
+                text = text, style = TextStyle(
+                    fontSize = 16.sp
+                )
+            )
+        }) {
         val buttonModifier = Modifier.padding(4.dp)
         TextButton(
             modifier = buttonModifier, onClick = onClick
@@ -115,9 +159,9 @@ fun ResultDialog(dialogState: MutableState<DialogDisplayEnums>) {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun CommonDialog(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
-    text: String,
+    text: @Composable () -> Unit,
     buttons: @Composable () -> Unit,
 ) {
     val configuration = LocalConfiguration.current
@@ -135,7 +179,7 @@ fun CommonDialog(
             shape = RoundedCornerShape(8.dp),
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text(text)
+                text()
                 Spacer(modifier = Modifier.weight(1f))
                 Row(
                     modifier = Modifier.padding(2.dp),
@@ -192,6 +236,12 @@ fun ResultDialogInsertErrorPreview() {
 @Composable
 fun ResultDialogUpdateSuccessPreview() {
     ResultDialog(remember { mutableStateOf(DialogDisplayEnums.UPDATE_SUCCESS) })
+}
+
+@Preview(group = "ResultDialog")
+@Composable
+fun ResultDialogUpdateErrorPreview() {
+    ResultDialog(remember { mutableStateOf(DialogDisplayEnums.UPDATE_ERROR) })
 }
 
 @Preview(group = "ResultDialog")

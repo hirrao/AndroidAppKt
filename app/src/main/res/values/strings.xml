@@ -14,5 +14,9 @@
     <string name="input_error_text">Please input correct value</string>
     <string name="result_dialog_insert_success">Insert data success</string>
     <string name="result_dialog_insert_error">Insert data error, check the id is unique</string>
+    <string name="result_dialog_delete_success">Delete data success</string>
+    <string name="result_dialog_delete_error">Delete data error\nIMPORTANT: All value must be correct</string>
+    <string name="result_dialog_update_success">Update data success</string>
+    <string name="result_dialog_update_error">Update data error, maybe the id is not exact</string>
     <string name="result_dialog_button_1">Confirm</string>
 </resources>
