@@ -18,6 +18,6 @@
     <string name="result_dialog_update_error">更新数据失败, ID可能不存在</string>
     <string name="result_dialog_button_1">确认</string>
     <string name="result_dialog_delete_success">成功删除数据</string>
-    <string name="result_dialog_delete_error">删除数据失败\\n 注意所有值都需要对应</string>
+    <string name="result_dialog_delete_error">删除数据失败, ID可能不存在</string>
     <string name="result_dialog_update_success">成功更新数据</string>
 </resources>
