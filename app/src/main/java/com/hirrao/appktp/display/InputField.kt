@@ -77,7 +77,9 @@ fun CommonInputField(
         }
     }
     if (showDialog.value) {
-        UserDialog(User(id.intValue, name.value, age.intValue, height.doubleValue), showDialog,dialogState)
+        UserDialog(
+            User(id.intValue, name.value, age.intValue, height.doubleValue), showDialog, dialogState
+        )
     }
     if (dialogState.value != DialogDisplayEnums.NONE) {
         ResultDialog(dialogState)
@@ -101,16 +103,16 @@ fun UserTextInput(
         .padding(8.dp)
         .height(72.dp)
         .fillMaxWidth()
-    TextField(modifier = textModifier, value = idText, onValueChange = {
-        idText = it
-        idError = !idText.isDigitsOnly()
-        id.intValue = idText.toIntOrNull() ?: 0
-    }, label = { Text(stringResource(R.string.id_name)) })
-    TextField(modifier = textModifier, value = name.value, isError = idError, supportingText = {
+    TextField(modifier = textModifier, value = idText, isError = idError, supportingText = {
         if (idError) {
             Text(stringResource(R.string.input_error, stringResource(R.string.id_name)))
         }
     }, onValueChange = {
+        idText = it
+        idError = !idText.isDigitsOnly()
+        id.intValue = idText.toIntOrNull() ?: 0
+    }, label = { Text(stringResource(R.string.id_name)) })
+    TextField(modifier = textModifier, value = name.value, onValueChange = {
         name.value = it
     }, label = { Text(stringResource(R.string.name_name)) })
     TextField(modifier = textModifier, value = ageText, isError = ageError, supportingText = {
