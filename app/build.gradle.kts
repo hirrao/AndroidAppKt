@@ -36,9 +36,9 @@ val parseVersionCode = {
 }
 
 android {
-    namespace = "com.hirrao.appktp"
+    namespace = "com.hirrao.appktm"
     defaultConfig {
-        applicationId = "com.hirrao.appktp"
+        applicationId = "com.hirrao.appktm"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         compileSdk = libs.versions.compileSdk.get().toInt()

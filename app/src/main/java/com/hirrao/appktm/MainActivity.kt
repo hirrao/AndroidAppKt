@@ -1,4 +1,4 @@
-package com.hirrao.appktp
+package com.hirrao.appktm
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.hirrao.appktp.display.CommonInputField
-import com.hirrao.appktp.theme.AppTheme
+import com.hirrao.appktm.display.CommonInputField
+import com.hirrao.appktm.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.hirrao.appktp.display
+package com.hirrao.appktm.display
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -32,10 +32,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
-import com.hirrao.appktp.R
-import com.hirrao.appktp.data.User
-import com.hirrao.appktp.enums.DialogDisplayEnums
-import com.hirrao.appktp.theme.Red40
+import com.hirrao.appktm.R
+import com.hirrao.appktm.data.User
+import com.hirrao.appktm.enums.DialogDisplayEnums
+import com.hirrao.appktm.theme.Red40
 
 @Preview(
     name = "Main-Preview-zhCN-dark",

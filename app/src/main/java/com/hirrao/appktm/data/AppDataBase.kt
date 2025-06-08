@@ -1,4 +1,4 @@
-package com.hirrao.appktp.data
+package com.hirrao.appktm.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

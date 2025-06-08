@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "appktp"
+rootProject.name = "appktm"
 include(":app")

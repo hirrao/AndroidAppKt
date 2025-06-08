@@ -1,9 +1,9 @@
-package com.hirrao.appktp
+package com.hirrao.appktm
 
 import android.app.Application
 import androidx.room.Room
-import com.hirrao.appktp.data.AppDataBase
-import com.hirrao.appktp.data.UserDao
+import com.hirrao.appktm.data.AppDataBase
+import com.hirrao.appktm.data.UserDao
 
 class App : Application() {
     companion object {

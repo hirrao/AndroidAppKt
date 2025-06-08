@@ -1,4 +1,4 @@
-package com.hirrao.appktp.data
+package com.hirrao.appktm.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
