@@ -2,8 +2,12 @@ package com.hirrao.appktm.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
-@Database(entities = [User::class], version = 1)
+@Database(entities = [Config::class, MachineInfo::class, HealthInfo::class], version = 1)
+@TypeConverters(Converters::class)
 abstract class AppDataBase : RoomDatabase() {
-    abstract fun UserDao(): UserDao
+    abstract fun ConfigDao(): ConfigDao
+    abstract fun MachineInfoDao(): MachineInfoDao
+    abstract fun HealthInfoDao(): HealthInfoDao
 }
