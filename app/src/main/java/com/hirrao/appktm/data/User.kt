@@ -5,5 +5,10 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class User(
-    @PrimaryKey val id: Int
+    @PrimaryKey val id: Int,
+    val height: Double,
+    val weight: Double,
+    val systolicBloodPressure: Int,
+    val diastolicBloodPressure: Int,
+    val heartRate: Int,
 )
