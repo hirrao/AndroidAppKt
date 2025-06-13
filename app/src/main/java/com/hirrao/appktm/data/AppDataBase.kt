@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [Config::class, MachineInfo::class, HealthInfo::class], version = 2)
+@Database(entities = [Config::class, MachineInfo::class, HealthInfo::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun ConfigDao(): ConfigDao

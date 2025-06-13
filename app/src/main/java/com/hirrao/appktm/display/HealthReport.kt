@@ -11,7 +11,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,6 +37,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hirrao.appktm.App
 import com.hirrao.appktm.data.Config
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun TabItem(text: String, isSelected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
@@ -56,11 +71,24 @@ fun HealthAppScreen() {
     var currentPage by remember { mutableIntStateOf(0) }
     val configDao = App.configDao
     var config by remember { mutableStateOf<Config>(Config()) }
+    var showFirstLaunchDialog by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         config = configDao.get()!!
+        if (config.isFirstLaunch) showFirstLaunchDialog = true
     }
     val user = config
     val tabTitles = listOf("个人概览", "病情概况", "用药管理")
+
+    if (showFirstLaunchDialog) {
+        FirstLaunchDialog(initialConfig = config) { newConfig ->
+            config = newConfig
+            showFirstLaunchDialog = false
+            CoroutineScope(Dispatchers.IO).launch {
+                configDao.update(newConfig)
+            }
+
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(32.dp))
@@ -91,6 +119,5 @@ fun HealthAppScreen() {
             1 -> HealthDetailPage()
             2 -> MedicineManagePage(user)
         }
-
     }
 }

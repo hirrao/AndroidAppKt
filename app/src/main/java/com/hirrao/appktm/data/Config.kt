@@ -19,6 +19,7 @@ data class Config(
     val historyInfo1: String = "无记录",
     val historyInfo2: String = "无记录",
     val diseaseInfo: String = "无",
+    val isFirstLaunch: Boolean = true
 )
 
 @Entity(tableName = "Health_Info")

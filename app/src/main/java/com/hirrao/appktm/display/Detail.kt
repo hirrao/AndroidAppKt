@@ -31,36 +31,33 @@ import com.hirrao.appktm.App
 import com.hirrao.appktm.App.Companion.healthInfoDao
 import com.hirrao.appktm.data.Config
 import com.hirrao.appktm.data.HealthInfo
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun HealthDetailPage() {
     val configDao = App.configDao
     var config by remember { mutableStateOf<Config>(Config()) }
-    LaunchedEffect(Unit) {
-        config = configDao.get()!!
-    }
     var shouldUpdate by remember { mutableStateOf(false) }
-    LaunchedEffect(shouldUpdate) {
-        if (shouldUpdate) {
-            configDao.update(config)
-            shouldUpdate = false
-        }
-    }
     var isEditing by remember { mutableStateOf(false) }
     var diseaseInfo by remember { mutableStateOf(config.diseaseInfo) }
     var historyInfo0 by remember { mutableStateOf(config.historyInfo0) }
     var historyInfo1 by remember { mutableStateOf(config.historyInfo1) }
     var historyInfo2 by remember { mutableStateOf(config.historyInfo2) }
-    var tempDiseaseInfo by remember { mutableStateOf(diseaseInfo) }
-    var tempHistoryInfo0 by remember { mutableStateOf(historyInfo0) }
-    var tempHistoryInfo1 by remember { mutableStateOf(historyInfo1) }
-    var tempHistoryInfo2 by remember { mutableStateOf(historyInfo2) }
     var healthInfo by remember { mutableStateOf<HealthInfo?>(null) }
     LaunchedEffect(Unit) {
+        config = configDao.get()!!
+        diseaseInfo = config.diseaseInfo
+        historyInfo0 = config.historyInfo0
+        historyInfo1 = config.historyInfo1
+        historyInfo2 = config.historyInfo2
+    }
+    LaunchedEffect(Unit) {
         healthInfo = healthInfoDao.getLatest()
+    }
+    LaunchedEffect(shouldUpdate) {
+        if (shouldUpdate) {
+            configDao.update(config)
+            shouldUpdate = false
+        }
     }
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -95,38 +92,38 @@ fun HealthDetailPage() {
                         Spacer(modifier = Modifier.height(8.dp))
                         if (isEditing) {
                             OutlinedTextField(
-                                value = tempDiseaseInfo,
-                                onValueChange = { tempDiseaseInfo = it },
+                                value = diseaseInfo,
+                                onValueChange = { diseaseInfo = it },
                                 label = { Text("疾病信息") },
                                 modifier = Modifier.fillMaxWidth()
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             OutlinedTextField(
-                                value = tempHistoryInfo0,
-                                onValueChange = { tempHistoryInfo0 = it },
+                                value = historyInfo0,
+                                onValueChange = { historyInfo0 = it },
                                 label = { Text("既往史") },
                                 modifier = Modifier.fillMaxWidth()
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             OutlinedTextField(
-                                value = tempHistoryInfo1,
-                                onValueChange = { tempHistoryInfo1 = it },
+                                value = historyInfo1,
+                                onValueChange = { historyInfo1 = it },
                                 label = { Text("个人史") },
                                 modifier = Modifier.fillMaxWidth()
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             OutlinedTextField(
-                                value = tempHistoryInfo1,
-                                onValueChange = { tempHistoryInfo1 = it },
+                                value = historyInfo2,
+                                onValueChange = { historyInfo2 = it },
                                 label = { Text("家庭史") },
                                 modifier = Modifier.fillMaxWidth()
                             )
                         } else {
-                            Text(tempDiseaseInfo)
+                            Text(diseaseInfo)
                             Spacer(modifier = Modifier.height(8.dp))
-                            Text("既往史: $tempHistoryInfo0")
-                            Text("个人史: $tempHistoryInfo1")
-                            Text("家庭史: $tempHistoryInfo2")
+                            Text("既往史: $historyInfo0")
+                            Text("个人史: $historyInfo1")
+                            Text("家庭史: $historyInfo2")
                         }
                     }
                 }
@@ -152,16 +149,12 @@ fun HealthDetailPage() {
                     Button(onClick = {
                         isEditing = false
                         config = config.copy(
-                            diseaseInfo = tempDiseaseInfo,
-                            historyInfo0 = tempHistoryInfo0,
-                            historyInfo1 = tempHistoryInfo1,
-                            historyInfo2 = tempHistoryInfo2
+                            diseaseInfo = diseaseInfo,
+                            historyInfo0 = historyInfo0,
+                            historyInfo1 = historyInfo1,
+                            historyInfo2 = historyInfo2
                         )
                         shouldUpdate = true
-                        CoroutineScope(Dispatchers.IO).launch {
-                            configDao.update(config)
-                            shouldUpdate = false
-                        }
                     }) {
                         Text("保存")
                     }
