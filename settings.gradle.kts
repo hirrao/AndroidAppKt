@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "appktp"
 include(":app")
+include(":appktp2")

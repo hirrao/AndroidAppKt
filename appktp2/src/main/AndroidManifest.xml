@@ -23,10 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <provider
-            android:name=".data.Provider"
-            android:authorities="com.hirrao.appktp.data.Provider"
-            android:exported="true" />
     </application>
 
 </manifest>

@@ -31,7 +31,7 @@ jobs:
           uses: gradle/actions/setup-gradle@v4
 
         - name: Build
-          run: ./gradlew --no-daemon app:assembleDebug
+          run: ./gradlew --no-daemon app:assembleDebug && ./gradlew --no-daemon appktp2:assembleDebug
 
         - name: Upload Aritfact
           uses: actions/upload-artifact@v4
@@ -39,5 +39,6 @@ jobs:
             name: 'debug-apk'
             path: |
               app/build/outputs/apk/debug/*.apk
+              appktp2/build/outputs/apk/debug/*.apk
 
               
