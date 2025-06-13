@@ -47,6 +47,26 @@ fun HealthOverviewPage(user: Config) {
     LaunchedEffect(Unit) {
         machineList = withContext(Dispatchers.IO) { machineInfoDao.getAll() }
     }
+    var riskStr by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        val healthInfoLast7Days = withContext(Dispatchers.IO) {
+            healthInfoDao.getLast7Days(System.currentTimeMillis() / 1000L - 7 * 24 * 60 * 60)
+        }
+        val riskList = mutableMapOf<String, Int>(
+            "重度" to 0, "中度" to 0, "轻度" to 0, "正常高值" to 0, "正常" to 0, "偏低" to 0
+        )
+        healthInfoLast7Days.forEach {
+            val riskLevel = generateRiskLevel(
+                it.systolicBloodPressure, it.diastolicBloodPressure
+            )
+            riskList[riskLevel] = riskList.getOrDefault(riskLevel, 0) + 1
+        }
+        riskStr = riskList.entries.filter { it.value != 0 }
+            .joinToString("\n") { "${it.key} ${it.value}次" }
+        if (riskStr.isBlank()) riskStr = "无数据"
+
+    }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -108,9 +128,9 @@ fun HealthOverviewPage(user: Config) {
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("最近七天血压异常统计", fontWeight = FontWeight.Bold)
+                    Text("最近七天血压统计", fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("异常血压统计：轻度 1次，其他 0次")
+                    Text("血压统计：$riskStr")
                 }
             }
 

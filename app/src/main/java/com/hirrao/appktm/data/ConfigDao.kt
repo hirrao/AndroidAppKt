@@ -41,6 +41,9 @@ interface HealthInfoDao {
     @Query("SELECT * FROM Health_Info")
     suspend fun getAll(): List<HealthInfo>
 
+    @Query("SELECT * FROM Health_Info WHERE id >= :id")
+    suspend fun getLast7Days(id: Long): List<HealthInfo>
+
     @Query("SELECT * FROM Health_Info WHERE id = (SELECT MAX(id) FROM Health_Info)")
     suspend fun getLatest(): HealthInfo?
 
