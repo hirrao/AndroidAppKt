@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -26,15 +27,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.hirrao.appktm.App.Companion.healthInfoDao
+import com.hirrao.appktm.App.Companion.machineInfoDao
 import com.hirrao.appktm.data.Config
 import com.hirrao.appktm.data.HealthInfo
+import com.hirrao.appktm.data.MachineInfo
+import com.hirrao.appktm.util.generateRiskLevel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.format.DateTimeFormatter
 
 @Composable
 fun HealthOverviewPage(user: Config) {
     var healthInfo by remember { mutableStateOf<HealthInfo?>(null) }
     LaunchedEffect(Unit) {
-        healthInfo = healthInfoDao.getLatest()
+        healthInfo = withContext(Dispatchers.IO) { healthInfoDao.getLatest() }
+    }
+    var machineList by remember { mutableStateOf(listOf<MachineInfo>()) }
+    LaunchedEffect(Unit) {
+        machineList = withContext(Dispatchers.IO) { machineInfoDao.getAll() }
     }
     LazyColumn(
         modifier = Modifier
@@ -75,9 +85,11 @@ fun HealthOverviewPage(user: Config) {
                             }
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                "风险评估：轻度",
-                                color = Color(0xFFFF9800),
-                                fontWeight = FontWeight.Bold
+                                "风险评估：${
+                                    generateRiskLevel(
+                                        systolicBloodPressure, diastolicBloodPressure
+                                    )
+                                }", color = Color(0xFFFF9800), fontWeight = FontWeight.Bold
                             )
                         }
                     }
@@ -103,7 +115,6 @@ fun HealthOverviewPage(user: Config) {
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -111,9 +122,15 @@ fun HealthOverviewPage(user: Config) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text("2024-08-26 用药管理", fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("阿莫西林 00:00 1毫克")
-                    Text("四季感冒片 00:00 20毫克")
-                    Text("四季感冒片 12:00 20毫克")
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(machineList) { item ->
+                            val timeStr = item.eatTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                            Text("${item.machineName} $timeStr ${item.dosage}毫克")
+                        }
+                    }
                 }
             }
         }

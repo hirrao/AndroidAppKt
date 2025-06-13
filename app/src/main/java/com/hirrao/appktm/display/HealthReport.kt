@@ -11,17 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,16 +30,13 @@ import com.hirrao.appktm.data.Config
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun TabItem(text: String, isSelected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .clickable { onClick() }
-            .background(if (isSelected) Color(0xFF0277BD) else Color(0xFF0288D1))
-            .padding(vertical = 12.dp, horizontal = 16.dp), contentAlignment = Alignment.Center) {
+    Box(modifier = modifier
+        .clickable { onClick() }
+        .background(if (isSelected) Color(0xFF0277BD) else Color(0xFF0288D1))
+        .padding(vertical = 12.dp, horizontal = 16.dp), contentAlignment = Alignment.Center) {
         Text(
             text = text,
             color = Color.White,
@@ -116,7 +103,7 @@ fun HealthAppScreen() {
         }
         when (currentPage) {
             0 -> HealthOverviewPage(user)
-            1 -> HealthDetailPage()
+            1 -> HealthDetailPage(user)
             2 -> MedicineManagePage(user)
         }
     }

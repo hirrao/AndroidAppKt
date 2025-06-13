@@ -1,6 +1,7 @@
 package com.hirrao.appktm.data
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
@@ -30,6 +31,9 @@ interface MachineInfoDao {
 
     @Update
     suspend fun update(machineInfo: MachineInfo)
+
+    @Delete
+    suspend fun delete(machineInfo: MachineInfo)
 }
 
 @Dao

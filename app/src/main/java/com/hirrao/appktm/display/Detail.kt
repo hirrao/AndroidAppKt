@@ -31,9 +31,15 @@ import com.hirrao.appktm.App
 import com.hirrao.appktm.App.Companion.healthInfoDao
 import com.hirrao.appktm.data.Config
 import com.hirrao.appktm.data.HealthInfo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
-fun HealthDetailPage() {
+fun HealthDetailPage(
+    headerUser: Config
+) {
     val configDao = App.configDao
     var config by remember { mutableStateOf<Config>(Config()) }
     var shouldUpdate by remember { mutableStateOf(false) }
@@ -44,19 +50,25 @@ fun HealthDetailPage() {
     var historyInfo2 by remember { mutableStateOf(config.historyInfo2) }
     var healthInfo by remember { mutableStateOf<HealthInfo?>(null) }
     LaunchedEffect(Unit) {
-        config = configDao.get()!!
-        diseaseInfo = config.diseaseInfo
-        historyInfo0 = config.historyInfo0
-        historyInfo1 = config.historyInfo1
-        historyInfo2 = config.historyInfo2
+        withContext(Dispatchers.IO) {
+            config = configDao.get()!!
+            diseaseInfo = config.diseaseInfo
+            historyInfo0 = config.historyInfo0
+            historyInfo1 = config.historyInfo1
+            historyInfo2 = config.historyInfo2
+        }
     }
     LaunchedEffect(Unit) {
-        healthInfo = healthInfoDao.getLatest()
+        withContext(Dispatchers.IO) {
+            healthInfo = healthInfoDao.getLatest()
+        }
     }
     LaunchedEffect(shouldUpdate) {
         if (shouldUpdate) {
-            configDao.update(config)
-            shouldUpdate = false
+            withContext(Dispatchers.IO) {
+                configDao.update(config)
+                shouldUpdate = false
+            }
         }
     }
     Box(modifier = Modifier.fillMaxSize()) {
@@ -68,21 +80,18 @@ fun HealthDetailPage() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                HealthHeader(config)
+                HealthHeader(headerUser)
+            }
+            item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text("基本信息", fontWeight = FontWeight.Bold)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text("体力状况评分：0分（优秀）")
-                        Text("身高体重：${config.height}cm ${config.weight}kg")
-                        Text("血压：${healthInfo?.systolicBloodPressure ?: 0.0} /${healthInfo?.diastolicBloodPressure ?: 0.0} mmHg")
-                        Text("心率：${healthInfo?.heartRate ?: 0} bpm")
-                    }
+                    BasicDetail(healthInfo = healthInfo)
                 }
                 Spacer(modifier = Modifier.height(16.dp))
+            }
+            item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -119,11 +128,11 @@ fun HealthDetailPage() {
                                 modifier = Modifier.fillMaxWidth()
                             )
                         } else {
-                            Text(diseaseInfo)
+                            Text(if (diseaseInfo.isNotBlank()) diseaseInfo else "无疾病信息")
                             Spacer(modifier = Modifier.height(8.dp))
-                            Text("既往史: $historyInfo0")
-                            Text("个人史: $historyInfo1")
-                            Text("家庭史: $historyInfo2")
+                            Text("既往史: ${if (historyInfo0.isNotBlank()) historyInfo0 else "无信息"}")
+                            Text("个人史: ${if (historyInfo1.isNotBlank()) historyInfo1 else "无信息"}")
+                            Text("家庭史: ${if (historyInfo2.isNotBlank()) historyInfo2 else "无信息"}")
                         }
                     }
                 }
@@ -165,6 +174,100 @@ fun HealthDetailPage() {
                 ) {
                     Text("编辑")
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun BasicDetail(healthInfo: HealthInfo?) {
+    var isAdding by remember { mutableStateOf(false) }
+    var height by remember { mutableStateOf("") }
+    var weight by remember { mutableStateOf("") }
+    var systolic by remember { mutableStateOf("") }
+    var diastolic by remember { mutableStateOf("") }
+    var heartRate by remember { mutableStateOf("") }
+    val heightValid = height.isNotBlank() && height.toDoubleOrNull() != null
+    val weightValid = weight.isNotBlank() && weight.toDoubleOrNull() != null
+    val systolicValid = systolic.isNotBlank() && systolic.toDoubleOrNull() != null
+    val diastolicValid = diastolic.isNotBlank() && diastolic.toDoubleOrNull() != null
+    val heartRateValid = heartRate.isNotBlank() && heartRate.toIntOrNull() != null
+    val allFilled = heightValid && weightValid && systolicValid && diastolicValid && heartRateValid
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("基本信息", fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(8.dp))
+        if (isAdding) {
+            OutlinedTextField(
+                value = height,
+                onValueChange = { height = it },
+                label = { Text("身高(cm)") },
+                modifier = Modifier.fillMaxWidth(),
+                isError = !heightValid
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = weight,
+                onValueChange = { weight = it },
+                label = { Text("体重(kg)") },
+                modifier = Modifier.fillMaxWidth(),
+                isError = !weightValid
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = systolic,
+                onValueChange = { systolic = it },
+                label = { Text("收缩压(mmHg)") },
+                modifier = Modifier.fillMaxWidth(),
+                isError = !systolicValid
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = diastolic,
+                onValueChange = { diastolic = it },
+                label = { Text("舒张压(mmHg)") },
+                modifier = Modifier.fillMaxWidth(),
+                isError = !diastolicValid
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = heartRate,
+                onValueChange = { heartRate = it },
+                label = { Text("心率(bpm)") },
+                modifier = Modifier.fillMaxWidth(),
+                isError = !heartRateValid
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                Button(onClick = { isAdding = false }, modifier = Modifier.weight(1f)) {
+                    Text("取消")
+                }
+                Spacer(modifier = Modifier.width(16.dp))
+                Button(
+                    onClick = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            healthInfoDao.insert(
+                                HealthInfo(
+                                    height = height.toDouble(),
+                                    weight = weight.toDouble(),
+                                    systolicBloodPressure = systolic.toDouble(),
+                                    diastolicBloodPressure = diastolic.toDouble(),
+                                    heartRate = heartRate.toInt()
+                                )
+                            )
+                        }
+                        isAdding = false
+                    }, modifier = Modifier.weight(1f), enabled = allFilled
+                ) {
+                    Text("保存")
+                }
+            }
+        } else {
+            Text("身高体重：${healthInfo?.height ?: 0.0}cm ${healthInfo?.weight ?: 0.0}kg")
+            Text("血压：${healthInfo?.systolicBloodPressure ?: 0.0} /${healthInfo?.diastolicBloodPressure ?: 0.0} mmHg")
+            Text("心率：${healthInfo?.heartRate ?: 0} bpm")
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = { isAdding = true }) {
+                Text("插入信息")
             }
         }
     }
