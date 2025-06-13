@@ -3,6 +3,7 @@ package com.hirrao.appktp.display
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -36,7 +39,9 @@ import com.hirrao.appktp.R
 import com.hirrao.appktp.data.User
 import com.hirrao.appktp.enums.DialogDisplayEnums
 import com.hirrao.appktp.theme.Red40
+import com.hirrao.appktp.theme.White
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(
     name = "Main-Preview-zhCN-dark",
     widthDp = 360,
@@ -70,7 +75,13 @@ fun CommonInputField(
     ) {
         UserTextInput(id, name, age, height)
         DataButtons(
-            id.intValue, name.value, age.intValue, height.doubleValue, showDialog, showErrorText
+            id.intValue,
+            name.value,
+            age.intValue,
+            height.doubleValue,
+            showDialog,
+            showErrorText,
+            dialogState
         )
         if (showErrorText.value) {
             ErrorText()
@@ -81,7 +92,16 @@ fun CommonInputField(
             User(id.intValue, name.value, age.intValue, height.doubleValue), showDialog, dialogState
         )
     }
-    if (dialogState.value != DialogDisplayEnums.NONE) {
+    if (dialogState.value == DialogDisplayEnums.DISPLAY) {
+        BasicAlertDialog(
+            onDismissRequest = { dialogState.value = DialogDisplayEnums.NONE },
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(White)
+        ) {
+            DisplayColumn()
+        }
+    } else if (dialogState.value != DialogDisplayEnums.NONE) {
         ResultDialog(dialogState)
     }
 }
@@ -142,7 +162,8 @@ fun DataButtons(
     age: Int,
     height: Double,
     showDialog: MutableState<Boolean>,
-    showErrorText: MutableState<Boolean>
+    showErrorText: MutableState<Boolean>,
+    dialogState: MutableState<DialogDisplayEnums>
 ) {
     Row(
         horizontalArrangement = Arrangement.Center
@@ -161,7 +182,9 @@ fun DataButtons(
         }) {
             Text(stringResource(R.string.data_button_1))
         }
-        Button(modifier = buttonModifier, onClick = { }) {
+        Button(modifier = buttonModifier, onClick = {
+            dialogState.value = DialogDisplayEnums.DISPLAY
+        }) {
             Text(stringResource(R.string.data_button_2))
         }
     }

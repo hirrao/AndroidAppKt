@@ -19,4 +19,5 @@
     <string name="result_dialog_update_success">Update data success</string>
     <string name="result_dialog_update_error">Update data error, maybe the id is not exact</string>
     <string name="result_dialog_button_1">Confirm</string>
+    <string name="display_dialog_text">Show values</string>
 </resources>
