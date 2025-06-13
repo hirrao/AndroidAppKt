@@ -24,8 +24,8 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         dataBase = Room.databaseBuilder(
-            applicationContext, AppDataBase::class.java, "app_database"
-        ).build()
+                applicationContext, AppDataBase::class.java, "app_database"
+            ).fallbackToDestructiveMigration(true).build()
         configDao = dataBase.ConfigDao()
         CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
             configDao.get() ?: configDao.insert(Config())
