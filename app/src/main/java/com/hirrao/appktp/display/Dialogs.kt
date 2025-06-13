@@ -22,7 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -164,9 +164,8 @@ fun CommonDialog(
     text: @Composable () -> Unit,
     buttons: @Composable () -> Unit,
 ) {
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.dp
-    val dialogHeight = screenHeight * 0.3f
+    val windowSize = LocalWindowInfo.current.containerSize
+    val dialogHeight = windowSize.height.dp * 0.3f
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
         modifier = Modifier

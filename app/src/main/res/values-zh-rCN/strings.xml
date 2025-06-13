@@ -20,4 +20,5 @@
     <string name="result_dialog_delete_success">成功删除数据</string>
     <string name="result_dialog_delete_error">删除数据失败, ID可能不存在</string>
     <string name="result_dialog_update_success">成功更新数据</string>
+    <string name="display_dialog_text">展示数据</string>
 </resources>

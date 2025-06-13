@@ -2,6 +2,8 @@ package com.hirrao.appktp.theme
 
 import androidx.compose.ui.graphics.Color
 
+val White = Color(0xFFFFFFFF)
+
 val Blue10 = Color(0xFF000F5E)
 val Blue20 = Color(0xFF001E92)
 val Blue30 = Color(0xFF002ECC)
